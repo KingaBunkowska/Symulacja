@@ -11,7 +11,19 @@ public class Animal {
     }
 
     public void move(MapDirection direction){
-        position=position.add(direction.getUnitVector());
-        System.out.println("Animal moved " + direction +"; new positione is "+ position);
+        position=pbc(position.add(direction.getUnitVector()));
+        System.out.println("Animal moved " + direction +"; new position is "+ position);
+    }
+
+    private Vector2D pbc(Vector2D position, int width, int height){
+        int width=Simulation.getMap().getWidth();
+        int height=Simulation.getMap().getHeight();
+
+        if (position.getX()>=width) return position.substract(new Vector2D(width,0));
+        if (position.getX()<0) return position.add(new Vector2D(width,0));
+        if (position.getY()>=width) return position.substract(new Vector2D(0,height));
+        if (position.getY()<0) return position.add(new Vector2D(0,height));
+
+        return position;
     }
 }

@@ -15,7 +15,7 @@ public class Animal {
         System.out.println("Animal moved " + direction +"; new position is "+ position);
     }
 
-    private Vector2D pbc(Vector2D position, int width, int height){
+    private Vector2D pbc(Vector2D position){
         int width=Simulation.getMap().getWidth();
         int height=Simulation.getMap().getHeight();
 

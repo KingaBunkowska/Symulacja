@@ -1,20 +1,23 @@
 package simulation;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 public class WorldMap extends AbstractWorldMap{
 
-    private ArrayList<Animal> animals = new ArrayList<Animal>();
-    private LinkedList<Plant> plants = new LinkedList<Plant>();
+    private ArrayList<Animal> animals = new ArrayList<>();
+    private HashMap<Vector2D, LinkedList<Animal>> animalsPositions = new HashMap<>();
+    private HashMap<Vector2D,Plant> plants = new HashMap<>();
     private Random random = new Random();
     private static final int ANIMALS_NO = 10, PLANTS_NO=100;
 
     public WorldMap (int width, int height){
         super(width,height);
         for (int i=0;i<ANIMALS_NO;i++){
-            animals.add(new Animal(getRandomPosition()));
+            Animal animal= new Animal(getRandomPosition());
+            animals.add(animal);
+            List<Animal> animalsAtPosition = animalsPositions.get(animal.getPosition());
+            placeAnimalOnMap(animal);
+            //animalsPositions.put(animal.getPosition(), animal);
         }
         for (int i=0; i<PLANTS_NO;i++){
             placePlantOnMap();
@@ -24,9 +27,8 @@ public class WorldMap extends AbstractWorldMap{
 
     private void placePlantOnMap (){
         Vector2D position = getRandomPosition();
-        plants.add(new Plant(getRandomPosition()));
         while (isOccupiedByPlant(position)) position = getRandomPosition();
-        plants.add(new Plant (position));
+        plants.put(position,new Plant (position));
     }
 
     private boolean isOccupiedByPlant(Vector2D position){
@@ -34,30 +36,52 @@ public class WorldMap extends AbstractWorldMap{
     }
 
     private Plant getPlantAtPosition(Vector2D position){
-        for (Plant plant:plants){
-            if (plant.getPosition().equals(position)) return plant;
-        }
-        return null;
+        return plants.get(position);
     }
 
     private Vector2D getRandomPosition (){
         return new Vector2D(random.nextInt(getWidth()), random.nextInt(getHeight()));
     }
 
+    private void placeAnimalOnMap(Animal animal) {
+        LinkedList<Animal> animalsAtPosition = animalsPositions.get(animal.getPosition());
+        if (animalsAtPosition == null) {
+            animalsAtPosition = new LinkedList<>();
+            animalsPositions.put(animal.getPosition(), animalsAtPosition);
+        }
+        animalsAtPosition.add(animal);
+    }
+
+    /*private void placeAnimalOnMap(Animal animal){
+        List<Animal> animalsAtPosition = animalsPositions.get(animal.getPosition());
+        if (animalsAtPosition == null){
+            animalsAtPosition = new LinkedList<>();
+            animalsPositions.put(animal.getPosition(), (LinkedList<Animal>) animalsAtPosition);
+        }
+        animalsAtPosition.add(animal);
+    }*/
     @Override
-    public void  run (){
+    /*public void  run (){
         for (Animal animal:animals){
             animal.move(MapDirection.values()[random.nextInt(MapDirection.values().length)]);
         }
-    }
-    public void eat(){
+    }*/
+    public void  run (){
+        animalsPositions.clear();
         for (Animal animal:animals){
-            Plant plant = getPlantAtPosition(animal.getPosition());
-            if (plant != null) {
-                plants.remove(plant);
+            animal.move(MapDirection.values()[random.nextInt(MapDirection.values().length)]);
+            placeAnimalOnMap(animal);
+        }
+    }
+
+    public void eat(){
+        for (Animal animal : animals){
+            if (isOccupiedByPlant(animal.getPosition())){
+                plants.remove(animal.getPosition());
                 placePlantOnMap();
-                System.out.println("Animal ate plant");
+                System.out.println("Animal ate plant on position" + animal.getPosition());
             }
+
         }
     }
 

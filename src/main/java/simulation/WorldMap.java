@@ -5,6 +5,7 @@ import java.util.*;
 public class WorldMap extends AbstractWorldMap{
 
     private ArrayList<Animal> animals = new ArrayList<>();
+    private static final int INITIAL_ENERGY=20;
     private HashMap<Vector2D, LinkedList<Animal>> animalsPositions = new HashMap<>();
     private HashMap<Vector2D,Plant> plants = new HashMap<>();
     private Random random = new Random();
@@ -13,7 +14,7 @@ public class WorldMap extends AbstractWorldMap{
     public WorldMap (int width, int height){
         super(width,height);
         for (int i=0;i<ANIMALS_NO;i++){
-            Animal animal= new Animal(getRandomPosition());
+            Animal animal= new Animal(getRandomPosition(),INITIAL_ENERGY);
             animals.add(animal);
             List<Animal> animalsAtPosition = animalsPositions.get(animal.getPosition());
             placeAnimalOnMap(animal);
@@ -44,12 +45,7 @@ public class WorldMap extends AbstractWorldMap{
     }
 
     private void placeAnimalOnMap(Animal animal) {
-        LinkedList<Animal> animalsAtPosition = animalsPositions.get(animal.getPosition());
-        if (animalsAtPosition == null) {
-            animalsAtPosition = new LinkedList<>();
-            animalsPositions.put(animal.getPosition(), animalsAtPosition);
-        }
-        animalsAtPosition.add(animal);
+        animalsPositions.computeIfAbsent(animal.getPosition(), pos -> new LinkedList<>()).add(animal); //zwraca linkedListę i dodaje zwierzatko
     }
 
     /*private void placeAnimalOnMap(Animal animal){
@@ -66,7 +62,7 @@ public class WorldMap extends AbstractWorldMap{
             animal.move(MapDirection.values()[random.nextInt(MapDirection.values().length)]);
         }
     }*/
-    public void  run (){
+    public void run (){
         animalsPositions.clear();
         for (Animal animal:animals){
             animal.move(MapDirection.values()[random.nextInt(MapDirection.values().length)]);

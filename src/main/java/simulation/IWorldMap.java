@@ -7,4 +7,5 @@ public interface IWorldMap {
     void eat();
     void atTheEndOfDay();
     void reproduce();
+    void fight();
 }

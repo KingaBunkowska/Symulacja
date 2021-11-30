@@ -10,12 +10,14 @@ public class Animal implements Comparable<Animal>{
     private int age=1;
     private final Genome genome;
     private int numberOfChildren=0;
+    private final boolean gender; // 0-female, 1-male
 
     public Animal(Vector2D position, int energy) {
         this.position = position;
         this.energy=energy;
         animalId=counter++;
         this.genome = new Genome();
+        gender = new Random().nextBoolean();
     }
 
     public Animal(Animal mother, Animal father) {
@@ -28,6 +30,11 @@ public class Animal implements Comparable<Animal>{
         father.increaseNoOfChildren();
         animalId=counter++;
         this.genome = new Genome(mother.getGenome(), father.getGenome());
+        gender = new Random().nextBoolean();
+    }
+
+    public boolean isMale(){
+        return gender;
     }
 
     public Genome getGenome() {
@@ -82,14 +89,18 @@ public class Animal implements Comparable<Animal>{
         System.out.println("Animal" +" "+animalId+" "+"moved " + direction +"; new position is "+ position + ": energy: "+energy+ ": age: "+age);
     }
 
+    public void moveBasedOnGenome(){
+        move(genome.getRandomMove());
+    }
+
     private Vector2D pbc(Vector2D position){
         int width=Simulation.getMap().getWidth();
         int height=Simulation.getMap().getHeight();
 
-        if (position.getX()>=width) return position.substract(new Vector2D(width,0));
-        if (position.getX()<0) return position.add(new Vector2D(width,0));
-        if (position.getY()>=width) return position.substract(new Vector2D(0,height));
-        if (position.getY()<0) return position.add(new Vector2D(0,height));
+        if (position.x()>=width) return position.substract(new Vector2D(width,0));
+        if (position.x()<0) return position.add(new Vector2D(width,0));
+        if (position.y()>=width) return position.substract(new Vector2D(0,height));
+        if (position.y()<0) return position.add(new Vector2D(0,height));
 
         return position;
     }

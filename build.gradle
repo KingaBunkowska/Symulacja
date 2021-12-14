@@ -2,6 +2,16 @@ plugins {
     id 'java'
 }
 
+/*compileJava {
+    options.compilerArgs += ['--enable-preview']
+}
+tasks.withType(JavaCompile).all {
+    options.compilerArgs += ['--enable-preview']
+}
+tasks.withType(JavaExec) {
+    jvmArgs += '--enable-preview'
+}*/
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 

@@ -42,8 +42,12 @@ public class SimulationStatistics {
         return "Day: " + dayNumber +
                 "\nNumber of Animals: " + noOfAnimals +
                 "\nNumber of Plants: " + noOfPlants +
-                "\nMean Life Length: " + meanLifeLength +
-                "\nMean Children Number: " + meanNumberOfChildren +
-                "\nEnergy: " + meanEnergy + "\n";
+                "\nMean Life Length: " + formatNumber(meanLifeLength) +
+                "\nMean Children Number: " + formatNumber(meanNumberOfChildren) +
+                "\nMean Energy: " + formatNumber(meanEnergy) + "\n";
+    }
+
+    private String formatNumber(double number) {
+        return String.format("%.2f", number);
     }
 }

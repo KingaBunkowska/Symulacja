@@ -50,4 +50,12 @@ public class SimulationParams {
                     "\nEnergy: " + meanEnergy + "\n";
         }
     }
+
+    public static Map<String, Integer> getParamsMap() {
+        return paramsMap;
+    }
+
+    public static void setField(String fieldName, int value){
+        paramsMap.put(fieldName, value);
+    }
 }

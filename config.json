@@ -1,8 +1,8 @@
 {
   "width": 30,
   "height": 20,
-  "noOfAnimals": 100,
-  "noOfPlants": 200,
+  "noOfAnimals": 400,
+  "noOfPlants": 100,
   "animalEnergy": 50,
   "plantEnergy": 10,
   "speed": 5

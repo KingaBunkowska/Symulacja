@@ -47,19 +47,6 @@ public class Animal implements Comparable<Animal>{
 
     public int compareTo(Animal animal){
         return getEnergy()==animal.getEnergy() ? getAnimalId()-animal.getAnimalId(): getEnergy()-animal.getEnergy();
-        /*if (getEnergy()>animal.getEnergy()){
-            return 1;
-        }
-        else if (getEnergy()==animal.getEnergy()){
-            if (getAnimalId()>animal.getAnimalId()){
-                return 1;
-            }
-            else{
-                return 0;
-            }
-        }
-        else
-            return 0;*/
     }
 
     public int getEnergy(){
@@ -86,7 +73,7 @@ public class Animal implements Comparable<Animal>{
 
     public void move(MapDirection direction){
         position=pbc(position.add(direction.getUnitVector()));
-        System.out.println("Animal" +" "+animalId+" "+"moved " + direction +"; new position is "+ position + ": energy: "+energy+ ": age: "+age);
+        //System.out.println("Animal" +" "+animalId+" "+"moved " + direction +"; new position is "+ position + ": energy: "+energy+ ": age: "+age);
     }
 
     public void moveBasedOnGenome(){
@@ -97,10 +84,10 @@ public class Animal implements Comparable<Animal>{
         int width=Simulation.getMap().getWidth();
         int height=Simulation.getMap().getHeight();
 
-        if (position.x()>=width) return position.substract(new Vector2D(width,0));
-        if (position.x()<0) return position.add(new Vector2D(width,0));
-        if (position.y()>=width) return position.substract(new Vector2D(0,height));
-        if (position.y()<0) return position.add(new Vector2D(0,height));
+        if (position.x() < 0) return position.add(new Vector2D(width, 0));
+        if (position.x() >= width) return position.substract(new Vector2D(width, 0));
+        if (position.y() < 0) return position.add(new Vector2D(0, height));
+        if (position.y() >= height) return position.substract(new Vector2D(0, height));
 
         return position;
     }
